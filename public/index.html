@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Painel de Sinais</title>
+<link rel="manifest" href="/manifest.json" />
+<meta name="theme-color" content="#0a0d12" />
+<link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+
+<div id="tela-login" class="center-screen">
+  <form id="form-login" class="card" style="width:100%;max-width:360px;">
+    <div style="text-align:center;margin-bottom:20px;color:var(--green);font-weight:700;letter-spacing:.15em;font-size:12px;">
+      PAINEL DE SINAIS
+    </div>
+    <label class="mono" style="font-size:12px;color:var(--muted);">Email</label>
+    <div style="height:6px;"></div>
+    <input id="login-email" type="email" placeholder="seu@email.com" required />
+    <div style="height:12px;"></div>
+    <label class="mono" style="font-size:12px;color:var(--muted);">Senha</label>
+    <div style="height:6px;"></div>
+    <input id="login-senha" type="password" placeholder="••••••••" required />
+    <div id="login-erro" class="err"></div>
+    <div style="height:8px;"></div>
+    <button type="submit" class="btn-primary" style="width:100%;">Entrar</button>
+  </form>
+</div>
+
+<div id="tela-trocar-senha" class="center-screen hidden">
+  <form id="form-trocar" class="card" style="width:100%;max-width:360px;">
+    <div style="margin-bottom:16px;font-weight:700;">Crie sua senha definitiva</div>
+    <p style="color:var(--muted);font-size:13px;margin-bottom:14px;">Por segurança, troque a senha temporária antes de continuar.</p>
+    <input id="nova-senha" type="password" placeholder="Nova senha (mín. 6 caracteres)" required />
+    <div id="trocar-erro" class="err"></div>
+    <div style="height:8px;"></div>
+    <button type="submit" class="btn-primary" style="width:100%;">Salvar e continuar</button>
+  </form>
+</div>
+
+<div id="tela-painel" class="wrap hidden">
+  <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:18px;">
+    <div>
+      <div class="mono" style="color:var(--green);font-size:12px;letter-spacing:.15em;">SINAIS EM TEMPO REAL</div>
+      <h1 style="margin:4px 0 0;font-size:22px;">Painel de Confluência</h1>
+    </div>
+    <div style="display:flex;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:4px;" id="seletor-tf"></div>
+  </div>
+  <div id="grid-ativos" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;"></div>
+  <p style="color:var(--muted);font-size:12px;margin-top:24px;line-height:1.6;border-top:1px solid var(--border);padding-top:16px;">
+    Sinal calculado por EMA9/EMA21, RSI(14) e MACD(12,26,9). Isto é leitura técnica automatizada, não é recomendação de investimento nem garantia de resultado.
+  </p>
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>
