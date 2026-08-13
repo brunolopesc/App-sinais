@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gestor · Painel de Sinais</title>
+<link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+
+<div id="tela-login" class="center-screen">
+  <form id="form-login-admin" class="card" style="width:100%;max-width:360px;">
+    <div style="text-align:center;margin-bottom:20px;color:var(--green);font-weight:700;letter-spacing:.15em;font-size:12px;">PAINEL DO GESTOR</div>
+    <input id="admin-email" type="email" placeholder="seu@email.com" required />
+    <div style="height:12px;"></div>
+    <input id="admin-senha" type="password" placeholder="senha" required />
+    <div id="admin-login-erro" class="err"></div>
+    <div style="height:8px;"></div>
+    <button type="submit" class="btn-primary" style="width:100%;">Entrar</button>
+  </form>
+</div>
+
+<div id="tela-admin" class="wrap hidden">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+    <div style="font-weight:700;">Gestor</div>
+    <button class="btn-ghost" id="btn-sair">sair</button>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;" id="resumo"></div>
+
+  <form id="form-add" class="card" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+    <input id="novo-email" type="email" placeholder="email-do-cliente@email.com" required style="flex:1;min-width:200px;" />
+    <select id="novo-modo">
+      <option value="teste">Teste 24h</option>
+      <option value="ativo">Ativo (gera link de pagamento)</option>
+    </select>
+    <button type="submit" class="btn-primary">liberar acesso</button>
+  </form>
+
+  <div id="resultado-add" class="card hidden" style="margin-bottom:16px;"></div>
+
+  <div id="lista-clientes"></div>
+</div>
+
+<script src="/admin.js"></script>
+</body>
+</html>
