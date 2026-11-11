@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard de Sinais</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0E14; --panel:#0E1219; --card:#141925; --border:#1C2230;
+    --text:#E7EBF2; --muted:#6B7585; --accent:#D4A857;
+    --green:#22C55E; --green-bg:#13241B; --green-border:#1E3A2A;
+    --red:#EF4444; --red-bg:#241313; --red-border:#3A1E1E;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--text); font-family:'Inter',sans-serif;}
+  a{color:var(--muted); text-decoration:none}
+  a:hover{color:var(--text)}
+  .layout{display:flex; min-height:100vh;}
+  nav{
+    width:220px; flex:none; background:var(--panel); border-right:1px solid var(--border);
+    padding:28px 18px; display:flex; flex-direction:column; gap:32px;
+  }
+  .logo{display:flex; align-items:center; gap:10px;}
+  .logo-mark{
+    width:32px; height:32px; border-radius:8px;
+    background:linear-gradient(135deg,var(--accent),#8A6A2A);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk',sans-serif; font-weight:700; color:var(--bg); font-size:15px;
+  }
+  .logo-text{font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:17px; letter-spacing:-0.02em;}
+  .nav-links{display:flex; flex-direction:column; gap:4px;}
+  .nav-links a{display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:8px; font-size:14px;}
+  .nav-links a.active{background:#161B26; color:var(--text); font-weight:600;}
+  .plan-card{margin-top:auto; padding:14px; border-radius:10px; background:var(--card); border:1px solid var(--border);}
+  .plan-card .label{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px;}
+  .plan-card .value{font-size:14px; font-weight:600; color:var(--accent);}
+  .plan-card .sub{font-size:12px; color:var(--muted); margin-top:2px;}
+  main{flex:1; min-width:0; padding:28px 32px; display:flex; flex-direction:column; gap:24px;}
+  .topbar{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;}
+  .topbar h1{margin:0; font-family:'Space Grotesk',sans-serif; font-size:22px; font-weight:700;}
+  .topbar p{margin:4px 0 0; font-size:13px; color:var(--muted);}
+  .live-badge{display:flex; align-items:center; gap:6px; font-size:12px; color:var(--green); background:var(--green-bg); border:1px solid var(--green-border); padding:6px 10px; border-radius:999px;}
+  .dot{width:6px; height:6px; border-radius:50%; background:var(--green);}
+  .grid-main{display:flex; gap:20px; flex-wrap:wrap;}
+  .chart-panel{flex:2 1 480px; background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:18px; min-height:420px; display:flex; flex-direction:column; gap:14px;}
+  .chart-head{display:flex; align-items:center; justify-content:space-between;}
+  .pair-select select{background:var(--card); color:var(--text); border:1px solid var(--border); border-radius:8px; padding:6px 10px; font-size:13px; font-family:inherit;}
+  .tv-wrap{flex:1; min-height:340px; border-radius:10px; overflow:hidden;}
+  .feed-panel{flex:1 1 300px; background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:18px; display:flex; flex-direction:column; gap:12px; max-height:420px; overflow-y:auto;}
+  .feed-panel h2{margin:0; font-size:14px; font-weight:700; color:#9CA7B8; text-transform:uppercase; letter-spacing:0.04em;}
+  .signal{border-radius:10px; padding:12px 14px; display:flex; flex-direction:column; gap:6px; background:var(--card); border:1px solid var(--border);}
+  .signal.buy{border-color:var(--green-border);}
+  .signal.sell{border-color:var(--red-border);}
+  .signal-row{display:flex; justify-content:space-between; align-items:center;}
+  .pill{font-size:11px; font-weight:700; color:var(--bg); padding:2px 8px; border-radius:6px;}
+  .pill.buy{background:var(--green);}
+  .pill.sell{background:var(--red);}
+  .pill.wait{background:var(--border); color:#9CA7B8;}
+  .signal small{color:var(--muted); font-size:12px;}
+  .pairs-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:14px;}
+  .pair-card{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:16px;}
+  .pair-card .sym{font-size:12px; color:var(--muted); margin-bottom:4px;}
+  .pair-card .px{font-family:'Space Grotesk',sans-serif; font-size:18px; font-weight:700;}
+  .pair-card .trend{font-size:12px; margin-top:2px;}
+  @media (max-width: 760px){
+    .layout{flex-direction:column;}
+    nav{width:100%; flex-direction:row; align-items:center; padding:14px 18px; gap:16px; overflow-x:auto;}
+    .nav-links{flex-direction:row;}
+    .plan-card{display:none;}
+    main{padding:20px;}
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <nav>
+    <div class="logo">
+      <div class="logo-mark">S</div>
+      <span class="logo-text">Sinais Pro</span>
+    </div>
+    <div class="nav-links">
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="#">Sinais</a>
+      <a href="#">Corretora</a>
+      <a href="#">Assinatura</a>
+    </div>
+    <div class="plan-card">
+      <div class="label">Plano</div>
+      <div class="value">Premium ativo</div>
+      <div class="sub">Renova em 14 dias</div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="topbar">
+      <div>
+        <h1>Painel de sinais</h1>
+        <p id="updated-at">Atualizado agora · M1 · M5 · M15 · H1</p>
+      </div>
+      <span class="live-badge"><span class="dot"></span> Ao vivo</span>
+    </div>
+
+    <div class="grid-main">
+      <section class="chart-panel">
+        <div class="chart-head">
+          <div class="pair-select">
+            <select id="symbol-select" onchange="loadChart(this.value)">
+              <option value="OANDA:XAUUSD">XAU/USD (Ouro)</option>
+              <option value="OANDA:EURUSD">EUR/USD</option>
+              <option value="OANDA:GBPUSD">GBP/USD</option>
+              <option value="OANDA:USDJPY">USD/JPY</option>
+              <option value="BINANCE:BTCUSDT">BTC/USD</option>
+              <option value="BINANCE:ETHUSDT">ETH/USD</option>
+            </select>
+          </div>
+        </div>
+        <div class="tv-wrap" id="tv-wrap">
+          <!-- TradingView Widget BEGIN -->
+          <div class="tradingview-widget-container" style="height:100%;width:100%">
+            <div id="tv-chart" style="height:100%;width:100%"></div>
+          </div>
+          <!-- TradingView Widget END -->
+        </div>
+      </section>
+
+      <section class="feed-panel">
+        <h2>Últimos sinais</h2>
+        <div id="signal-feed">
+          <article class="signal buy">
+            <div class="signal-row"><strong>EUR/USD</strong><span class="pill buy">COMPRA</span></div>
+            <small>M15 · Entrada [VALOR] · SL [VALOR] · TP [VALOR]</small>
+          </article>
+          <article class="signal sell">
+            <div class="signal-row"><strong>GBP/USD</strong><span class="pill sell">VENDA</span></div>
+            <small>M5 · Entrada [VALOR] · SL [VALOR] · TP [VALOR]</small>
+          </article>
+          <article class="signal buy">
+            <div class="signal-row"><strong>XAU/USD</strong><span class="pill buy">COMPRA</span></div>
+            <small>H1 · Entrada [VALOR] · SL [VALOR] · TP [VALOR]</small>
+          </article>
+          <article class="signal" style="opacity:.6">
+            <div class="signal-row"><strong>BTC/USD</strong><span class="pill wait">AGUARDANDO</span></div>
+            <small>M1 · Sem confluência no momento</small>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <section class="pairs-grid">
+      <div class="pair-card"><div class="sym">USD/JPY</div><div class="px">[PREÇO]</div><div class="trend" style="color:var(--green)">M1h · Compra</div></div>
+      <div class="pair-card"><div class="sym">AUD/USD</div><div class="px">[PREÇO]</div><div class="trend" style="color:var(--muted)">M15 · Neutro</div></div>
+      <div class="pair-card"><div class="sym">ETH/USD</div><div class="px">[PREÇO]</div><div class="trend" style="color:var(--red)">M5 · Venda</div></div>
+      <div class="pair-card"><div class="sym">XAU/USD</div><div class="px">[PREÇO]</div><div class="trend" style="color:var(--green)">H1 · Compra</div></div>
+    </section>
+  </main>
+</div>
+
+<script src="https://s3.tradingview.com/tv.js"></script>
+<script>
+  function loadChart(symbol){
+    document.getElementById('tv-chart').innerHTML = '';
+    new TradingView.widget({
+      autosize: true,
+      symbol: symbol,
+      interval: "60",
+      timezone: "America/Sao_Paulo",
+      theme: "dark",
+      style: "1",
+      locale: "br",
+      toolbar_bg: "#0E1219",
+      enable_publishing: false,
+      hide_top_toolbar: false,
+      allow_symbol_change: false,
+      container_id: "tv-chart"
+    });
+  }
+  loadChart(document.getElementById('symbol-select').value);
+
+  document.getElementById('updated-at').textContent =
+    'Atualizado ' + new Date().toLocaleTimeString('pt-BR') + ' · M1 · M5 · M15 · H1';
+</script>
+</body>
+</html>
